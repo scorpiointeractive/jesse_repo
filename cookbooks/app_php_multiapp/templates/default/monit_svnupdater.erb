@@ -1,0 +1,4 @@
+check process svnupdate with pidfile /var/run/svnupdate2way/process.pid
+    start program = "/root/scripts/svn_twoway/svn_updaterwrapper start"
+    stop program  = "/root/scripts/svn_twoway/svn_updaterwrapper stop"
+    if cpu > 80% for 5 cycles then restart

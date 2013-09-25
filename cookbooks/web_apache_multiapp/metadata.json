@@ -1,0 +1,119 @@
+{
+  "replacing": {
+  },
+  "license": "Copyright Scorpio Media, Inc. All rights reserved.",
+  "maintainer_email": "tom@scorp.io",
+  "maintainer": "Scorpio Media",
+  "groupings": {
+  },
+  "version": "13.5.0",
+  "recommendations": {
+  },
+  "description": "This cookbook installs and configures an Apache2 web server with multiple web applications.",
+  "attributes": {
+    "web_apache_multiapp/allow_override": {
+      "required": "optional",
+      "display_name": "AllowOverride Directive",
+      "default": "None",
+      "description": "Allows/disallows the use of .htaccess files in project web root directory. Can be None (default), All, or any directive-type as specified in Apache documentation. Example: None",
+      "type": "string",
+      "choice": [
+        "None",
+        "All"
+      ],
+      "recipes": [
+        "web_apache_multiapp::setup_frontend_multiapp",
+        "web_apache_multiapp::default"
+      ],
+      "calculated": false
+    },
+    "web_apache_multiapp/mpm": {
+      "required": "optional",
+      "display_name": "Multi-Processing Module",
+      "default": "prefork",
+      "description": "Defines the multi-processing module setting in httpd.conf. Use 'worker' for Rails/Tomcat/Standalone frontends and 'prefork' for PHP. Example: prefork",
+      "type": "string",
+      "choice": [
+        "prefork",
+        "worker"
+      ],
+      "recipes": [
+        "web_apache_multiapp::default",
+        "web_apache_multiapp::install_apache",
+        "web_apache_multiapp::setup_frontend_multiapp"
+      ],
+      "calculated": false
+    },
+    "web_apache_multiapp/application_name": {
+      "required": "optional",
+      "display_name": "Application Name",
+      "default": "myapp",
+      "description": "Sets the directory for your application's web files (/home/webapps/Application Name/). If you have multiple applications, you can run the code checkout script multiple times, each with a different value for the 'Application Name' input, so each application will be stored in a unique directory. This must be a valid directory name. Do not use symbols in the name. Example: myapp",
+      "type": "string",
+      "choice": [
+
+      ],
+      "recipes": [
+        "web_apache_multiapp::setup_frontend_multiapp",
+        "web_apache_multiapp::default"
+      ],
+      "calculated": false
+    },
+    "web_apache_multiapp": {
+      "required": "optional",
+      "display_name": "apache hash",
+      "description": "Apache Web Server",
+      "type": "hash",
+      "choice": [
+
+      ],
+      "recipes": [
+
+      ],
+      "calculated": false
+    },
+    "web_apache_multiapp/apps_json": {
+      "required": "optional",
+      "display_name": "JSON Application config data",
+      "default": "{\n   \"sites\":[\n      {\n         \"name\":\"example.com\",\n         \"aliases\":[\n            \"www.example.com\",\n            \"ex.am.pl\"\n         ],\n         \"ssl_cert\":\"BEGIN CERTIFICATE AAAAA END CERTIFICATE\",\n         \"ssl_key\":\"BEGIN RSA PRIVATE KEY BBBBB END RSA PRIVATE KEY\",\n         \"ssl_chain\":\"BEGIN CERTIFICATE CCCCC END CERTIFICATE\",\n         \"svn_remote_repo\":\"https://subversion.assembla.com/svn/my-project/branches/production/\"\n      }\n   ]\n}",
+      "description": "Hosts the server name, aliases, ssl info, and SVN info for multiple web applications. The format is as follows: {\"sites\":[{\"name\":\"example.com\", \"aliases\":[\"ex.am.pl\",\"ex.ample.com\"], \"ssl_cert\"=\"<SSL cert contents>\",\"ssl_key\"=\"<SSL key contents>\",\"ssl_chain\"=\"<SSL chain contents>\", \"svn_remote_repo\":https://svn.myrepo.com/project/\"}]} of multiple sites/applications. Aliases and ssl are optional.",
+      "type": "string",
+      "choice": [
+
+      ],
+      "recipes": [
+        "web_apache_multiapp::setup_frontend_multiapp"
+      ],
+      "calculated": false
+    }
+  },
+  "conflicting": {
+  },
+  "platforms": {
+    "redhat": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "centos": ">= 0.0.0"
+  },
+  "long_description": "# RightScale Web Apache Cookbook\n\n## DESCRIPTION:\n\nThis cookbook installs and configures an Apache2 web server with multiple web applications and SSL support.\n\n## REQUIREMENTS:\n\nRequires a virtual machine launched from a RightScale managed RightImage.\n\n## COOKBOOKS DEPENDENCIES:\n\nPlease see `metadata.rb` file for the latest dependencies.\n\n## KNOWN LIMITATIONS:\n\nThere is no support for SSL Passphrases.\n\n## SETUP/USAGE:\n\n* Place the `web_apache_multiapp::install_server` recipe into your runlist to set up the\n  apache web server.\n* Use the `web_apache_multiapp::setup_monitoring` recipe to add apache monitoring options\n  to your dashboard \"Monitoring\" tab.\n\n## DETAILS:\n\n### General\n\nThe recipes in this cookbook are designed to perform basic operations on an\napache web server.\n\n### Attributes:\n\nDetailed cookbook attributes descriptions you can find in attributed/default.rb\nfile\n\n## Templates:\n\n* `apache.conf.erb` -\n  Configuration for apache vhost file.\n* `apache_collectd_exec.erb` -\n  Collectd exec plugin configuration template.\n* `apache_collectd_plugin.conf.erb` -\n  Collectd status plugin configuration template.\n* `apache_ssl_vhost.erb` -\n  Configuration for apache ssl vhost file.\n* `apache_status.conf.erb` -\n  Configuration for apache status information access.\n* `maintenance.conf.erb` -\n  Configuration for apache maintenance mode setup.\n* `ssl_certificate.erb` -\n  Apache ssl certificate path template.\n* `ssl_certificate_chain.erb` -\n  Apache ssl certificate chain path template.\n* `ssl_key.erb` -\n  Apache ssl key template.\n* `sysconfig_httpd.erb` -\n  Configuration file template for the apache service.\n\n## LICENSE\n\nCopyright RightScale, Inc. All rights reserved.\nAll access and use subject to the RightScale Terms of Service available at\nhttp://www.rightscale.com/terms.php and, if applicable, other agreements\nsuch as a RightScale Master Subscription Agreement..\n",
+  "recipes": {
+    "web_apache_multiapp::do_disable_maintenance_mode": "Disables maintenance mode for Apache2 webserver",
+    "web_apache_multiapp::setup_monitoring": "Installs the collectd-apache plugin for monitoring support.",
+    "web_apache_multiapp::do_stop": "Runs service apache stop.",
+    "web_apache_multiapp::default": "Runs web_apache_multiapp::install_apache.",
+    "web_apache_multiapp::do_enable_maintenance_mode": "Enables maintenance mode for Apache2 webserver",
+    "web_apache_multiapp::setup_frontend_multiapp": "Sets up front-end apache vhost depending on the JSON application config data. Supports SSL, without passphrases.",
+    "web_apache_multiapp::install_apache": "Installs and configures the Apache2 webserver.",
+    "web_apache_multiapp::do_restart": "Runs service apache restart.",
+    "web_apache_multiapp::do_enable_default_site": "Enables the default vhost.",
+    "web_apache_multiapp::do_start": "Runs service apache start."
+  },
+  "providing": {
+  },
+  "suggestions": {
+  },
+  "name": "web_apache_multiapp",
+  "dependencies": {
+    "apache2": ">= 0.0.0",
+    "rightscale": ">= 0.0.0"
+  }
+}

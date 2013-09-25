@@ -1,0 +1,292 @@
+{
+  "license": "Copyright Scorpio Media. All rights reserved.",
+  "conflicting": {
+  },
+  "replacing": {
+  },
+  "version": "13.5.0",
+  "groupings": {
+  },
+  "providing": {
+  },
+  "recommendations": {
+  },
+  "maintainer_email": "jesse@scorp.io",
+  "name": "scorpio_defaults",
+  "attributes": {
+    "scorpio_defaults/cloudflare_key": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "CloudFlare Key",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/apps_json": {
+      "required": "optional",
+      "choice": [
+
+      ],
+      "default": "{\n   \"sites\":[\n       {\n         \"name\":\"example.com\",\n         \"aliases\":[\n            \"www.example.com\",\n            \"ex.am.pl\"\n         ],\n         \"ssl_cert\":\"BEGIN CERTIFICATE AAAAA END CERTIFICATE\",\n         \"ssl_key\":\"BEGIN RSA PRIVATE KEY BBBBB END RSA PRIVATE KEY\",\n         \"ssl_chain\":\"BEGIN CERTIFICATE CCCCC END CERTIFICATE\",\n         \"svn_remote_repo\":\"https://subversion.assembla.com/svn/my-project/branches/production/\"\n       }\n     ]\n   }",
+      "display_name": "JSON Application config data",
+      "type": "string",
+      "calculated": false,
+      "description": "Hosts the server name, aliases, ssl info, and SVN info for multiple web applications. The format is as follows: {\"sites\":[{\"name\":\"example.com\", \"aliases\":[\"ex.am.pl\",\"ex.ample.com\"], \"ssl_cert\"=\"<SSL cert contents>\",\"ssl_key\"=\"<SSL key contents>\",\"ssl_chain\"=\"<SSL chain contents>\", \"svn_remote_repo\":https://svn.myrepo.com/project/\"}]} of multiple sites/applications. Aliases and ssl are optional.",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/chk_url": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Url to check",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/rs_pswd": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Rigthscale Password",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/cloudflare_rec_name": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "CloudFlare DNS Record Name",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/cloudflare_host": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "CloudFlare Host",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/cloudflare_user": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "CloudFlare User",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/storage_accnt_id": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Cloud Storage Account ID",
+      "type": "string",
+      "calculated": false,
+      "description": "In order to read and/or write to the specified cloud storage location, you need to provide cloud authentication credentials. For Amazon S3, use your Amazon access key ID (e.g., cred:AWS_ACCESS_KEY_ID). For Rackspace Cloud Files, use your Rackspace login username (e.g., cred:RACKSPACE_USERNAME). For OpenStack Swift the format is: 'tenantID:username'. Example: cred:AWS_ACCESS_KEY_ID",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/storage_provider": {
+      "required": "required",
+      "choice": [
+        "s3",
+        "Cloud_Files",
+        "Cloud_Files_UK",
+        "google",
+        "azure",
+        "swift",
+        "SoftLayer_Dallas",
+        "SoftLayer_Singapore",
+        "SoftLayer_Amsterdam"
+      ],
+      "display_name": "Cloud Storage Account Provider",
+      "type": "string",
+      "calculated": false,
+      "description": "The cloud storage provider. (complete list of supported storage locations is in input dropdown). Example: google",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/tag_search": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Instance Search Tag",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/cloudflare_rec_ids": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "CloudFlare DNS Record IDs",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/storage_container": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Cloud Storage Bucket or Container",
+      "type": "string",
+      "calculated": false,
+      "description": "The cloud storage provider container and/or bucket. For Amazon S3, use the bucket name. For Rackspace Cloud Files, use the container name. Example: scorpio-media",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/rs_id": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Rigthscale ID",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/rs_email": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Rigthscale Email",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/storage_accnt_secret": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Cloud Storage Account Secret",
+      "type": "string",
+      "calculated": false,
+      "description": "In order to read and/or write to the specified cloud storage location, you need to provide cloud authentication credentials. For Amazon S3, use your AWS secret access key (e.g., cred:AWS_SECRET_ACCESS_KEY). For Rackspace Cloud Files, use your Rackspace account API key (e.g., cred:RACKSPACE_AUTH_KEY). Example: cred:AWS_SECRET_ACCESS_KEY",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/mod_cloudflare_backup_prefix": {
+      "required": "optional",
+      "choice": [
+
+      ],
+      "default": "MOD_CLOUDFLARE_BACKUP",
+      "display_name": "Apache mod_cloudflare Backup Prefix",
+      "type": "string",
+      "calculated": false,
+      "description": "The prefix that will be used to name/locate the backup of Apache mod_cloudflare.",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/svn_sync_backup_prefix": {
+      "required": "optional",
+      "choice": [
+
+      ],
+      "default": "SVN_SCRIPT_BACKUP",
+      "display_name": "SVN Sync Backup Prefix",
+      "type": "string",
+      "calculated": false,
+      "description": "The prefix that will be used to name/locate the backup of Jesse SVN sync script and its associated files.",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/site_name": {
+      "required": "required",
+      "choice": [
+
+      ],
+      "display_name": "Site Name",
+      "type": "string",
+      "calculated": false,
+      "description": "No description for now",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    },
+    "scorpio_defaults/mod_rpaf_backup_prefix": {
+      "required": "optional",
+      "choice": [
+
+      ],
+      "default": "MOD_RPAF_BACKUP",
+      "display_name": "Apache mod_rpaf Backup Prefix",
+      "type": "string",
+      "calculated": false,
+      "description": "The prefix that will be used to name/locate the backup of Apache mod_rpaf.",
+      "recipes": [
+        "scorpio_defaults::set_defaults"
+      ]
+    }
+  },
+  "dependencies": {
+  },
+  "platforms": {
+    "centos": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "redhat": ">= 0.0.0"
+  },
+  "description": "A fabulous new cookbook",
+  "recipes": {
+    "scorpio_defaults::set_defaults": " Sets common node attributes"
+  },
+  "suggestions": {
+  },
+  "long_description": "# Scorpio Media Defaults Cookbook\n\n## DESCRIPTION:\n\nSet scorpio media specific attributes that might be needed to another cookbooks.\n\n\n",
+  "maintainer": "Scorpio Media"
+}

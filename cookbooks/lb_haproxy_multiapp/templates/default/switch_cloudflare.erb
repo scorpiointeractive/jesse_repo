@@ -1,0 +1,63 @@
+#!/bin/bash
+CLOUDFLARE_KEY=<%= @cloudflare_key %>
+CLOUDFLARE_USER=<%= @cloudflare_user %>
+HOST=<%= @cloudflare_host %>
+CLOUDFLARE_REC_IDS=<%= @cloudflare_rec_ids %>
+CLOUDFLARE_REC_NAME=<%= @cloudflare_rec_name %>
+RS_ACCNT_EMAIL=<%= @rs_email %>
+RS_ACCNT_PSWD=<%= @rs_pswd %>
+RS_ACCNT_ID=<%= @rs_id %>
+RS_API_VERSION=X_API_VERSION:1.5
+RS_TAG_SEARCH=<%= @tag_search %>
+RS_API_COOKIE=MYRS_COOKIE
+SITE_NAME=<%= @site_name %>
+CHK_URL=<%= @chk_url %>
+CHK_STRING=lockerReady
+HOST_FILE=/etc/hosts
+
+curl -i -H X_API_VERSION:1.5 -c "$RS_API_COOKIE" -X POST -d email="$RS_ACCNT_EMAIL" -d password="$RS_ACCNT_PSWD" -d account_href="/api/accounts/$RS_ACCNT_ID" https://my.rightscale.com/api/session
+#curl -s -H X_API_Version:1.5 -b "$RS_API_COOKIE" -X POST -d resource_type=instances -d tags[]="$RS_TAG_SEARCH" https://my.rightscale.com/api/tags/by_tag.xml
+api_result=$(curl -s -H X_API_Version:1.5 -b "$RS_API_COOKIE" -X POST -d resource_type=instances -d tags[]="$RS_TAG_SEARCH" https://my.rightscale.com/api/tags/by_tag.xml)
+#echo "$api_result"
+
+#hrefs_xml=$(echo "$api_result" | grep "href=" | uniq)
+instances_string=$(echo "$api_result" | grep "href=" | uniq | awk -F "/" '{ printf("%s/%s ", $4, substr($6, 0, length($6)-1)) }')
+instances=($instances_string)
+echo $instances_string
+
+
+#loop instances
+cnt=0
+for i in "${instances[@]}"
+do
+  cloud_id=$(echo "$i" | awk -F "/" '{ print $1 }')
+  instance_id=$(echo "$i" | awk -F "/" '{ print $2 }')
+  result=$(curl -s -H X_API_Version:1.5 -b "$RS_API_COOKIE" -X GET https://my.rightscale.com/api/clouds/"$cloud_id"/instances/"$instance_id")
+  private_ip=$(echo "$result" | python -c 'import sys,json;data=json.loads(sys.stdin.read()); private_ip=data["private_ip_addresses"]; print private_ip[0]')
+  public_ip=$(echo "$result" | python -c 'import sys,json;data=json.loads(sys.stdin.read()); public_ip=data["public_ip_addresses"]; print public_ip[0]')
+  rec_id=${CLOUDFLARE_REC_IDS[$cnt]}
+
+  echo "Server: $instance_id, Public IP: $public_ip, Private IP: $private_ip"
+  #check if this LBL is working
+  #edit our host host file first
+  sed -i.bak "/$SITE_NAME/d" $HOST_FILE
+  echo "$private_ip $SITE_NAME" >> $HOST_FILE
+
+  if curl -s $CHK_URL | grep -q "$CHK_STRING"; then
+    echo "LBL $instance_id is working properly"
+    command="curl https://www.cloudflare.com/api_json.html -d "a=rec_edit" -d id="$rec_id" -d "type=A" -d "name=$CLOUDFLARE_REC_NAME" -d "content=$public_ip" -d "ttl=120" -d "service_mode=1" -d "tkn=$CLOUDFLARE_KEY" -d "email=$CLOUDFLARE_USER" -d "z=$HOST""
+    $command
+  else
+    echo "LBL $instance_id is NOT working properly"
+  fi
+
+  cnt=$((cnt + 1))
+
+  if [ "$cnt" -gt 2 ] ; then
+    cnt=0
+  fi
+done
+
+
+#remove out edited hosts file
+sed -i.bak "/$SITE_NAME/d" $HOST_FILE

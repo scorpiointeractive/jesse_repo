@@ -1,0 +1,13 @@
+*.swn
+*.swo
+*.swp
+.DEV_TEMP
+.DS_Store
+.idea
+.rake_test_cache
+.yardoc
+Gemfile.lock
+chefignoredoc
+doc/*
+tests/config/servertemplate_mapping/acu*.json
+switch_cloudflare.sh
