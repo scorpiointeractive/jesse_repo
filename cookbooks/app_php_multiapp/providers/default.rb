@@ -307,13 +307,14 @@ action :setup_monitoring do
 end
 
 action :update_rpaf do
-  machine_tag = new_resource.machine_tag
+  #machine_tag = new_resource.machine_tag
   ip_tag = new_resource.ip_tag
 
   # For backwards compatibility use the private ip tag if the ip_tag
   # was not passed
+  pool_name="default" 
   ip_tag = "server:private_ip_0" unless ip_tag
-
+  machine_tag = "loadbalancer:#{pool_name}=lb"
   collection_name = new_resource.collection
 
   log "  Using machine tags #{machine_tag} and #{ip_tag} to determine" +
