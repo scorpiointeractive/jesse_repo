@@ -357,17 +357,19 @@ action :update_rpaf do
   #  end
   #end
   
+  if platform_family?("debian", "ubuntu")
+    service_name = "apache2" 
+  else
+    service_name = "httpd" 
+  end
+
   bash "change rpaf config" do
    user "root"
    code <<-EOS
      sed -i '/RPAFproxy_ips/d' #{rpaf_file} &&
-     echo #{rpaf_proxy_ips} >> #{rpaf_file} 
+     echo #{rpaf_proxy_ips} >> #{rpaf_file} &&
+     service #{service_name} restart 
    EOS
    not_if "grep -q '#{rpaf_proxy_ips}' #{rpaf_file}"
-  end
-
-  service "apache2" do 
-    action :restart
-    persist false
   end
 end
