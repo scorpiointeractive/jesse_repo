@@ -349,14 +349,22 @@ action :update_rpaf do
 
   log "  New RPAF Config: #{rpaf_proxy_ips}"
 
-  ruby_block "edit rpaf config" do
-    block do
-      file = Chef::Util::FileEdit.new(rpaf_file)
-      file.search_file_replace_line("/RPAFproxy/", rpaf_proxy_ips)
-      file.write_file
-    end
-  end
+  #ruby_block "edit rpaf config" do
+  #  block do
+  #    file = Chef::Util::FileEdit.new(rpaf_file)
+  #    file.search_file_replace_line("/RPAFproxy/", rpaf_proxy_ips)
+  #    file.write_file
+  #  end
+  #end
   
+  bash "insert_line" do
+   user "root"
+   code <<-EOS
+     sed '/RPAFproxy_ips/d' rpaf_file &&
+     echo rpaf_proxy_ips >> rpaf_file 
+   EOS
+  end
+
   service "apache2" do 
     action :restart
     persist false
