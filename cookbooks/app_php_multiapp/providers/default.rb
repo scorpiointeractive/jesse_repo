@@ -335,11 +335,11 @@ action :update_rpaf do
     valid_ip_regex =
        '\b(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}' +
        '([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\b'
-    #ip_list = node[:server_collection][collection_name].collect do |_, tags|
+   ip_list = node[:server_collection][collection_name].collect do |_, tags|
       # See cookbooks/rightscale/libraries/helper.rb for
       # the "get_tag_value" definition.
-    #  RightScale::Utils::Helper.get_tag_value(ip_tag, tags, valid_ip_regex)
-    #end
+     RightScale::Utils::Helper.get_tag_value(ip_tag, tags, valid_ip_regex)
+   end
   end
 
   ip_list.each do |ip|
