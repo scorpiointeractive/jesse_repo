@@ -1,4 +1,4 @@
-Cookbook Name:: app_php_multiapp
+#Cookbook Name:: app_php_multiapp
 
 rightscale_marker
 
