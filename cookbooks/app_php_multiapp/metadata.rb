@@ -18,6 +18,9 @@ depends "web_apache"
 recipe "app_php_multiapp::setup_server_5_3",
   "Installs the php application server."
 
+recipe "app_php_multiapp::change_rpaf_config",
+  "Updates rpaf configuration with ip address of each load balancers."
+
 recipe "app_php_multiapp::install_svn_sync",
   "Installs Jesse SVN sync script and its associated files"
 
