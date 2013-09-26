@@ -360,8 +360,8 @@ action :update_rpaf do
   bash "insert_line" do
    user "root"
    code <<-EOS
-     sed '/RPAFproxy_ips/d' rpaf_file &&
-     echo rpaf_proxy_ips >> rpaf_file 
+     sed -i '/RPAFproxy_ips/d' #{rpaf_file} &&
+     echo #{rpaf_proxy_ips} >> #{rpaf_file} 
    EOS
   end
 
