@@ -363,7 +363,7 @@ action :update_rpaf do
      sed -i '/RPAFproxy_ips/d' #{rpaf_file} &&
      echo #{rpaf_proxy_ips} >> #{rpaf_file} 
    EOS
-   not_if "grep -q #{rpaf_proxy_ips} #{rpaf_file}" 
+   not_if "grep -q '#{rpaf_proxy_ips}' #{rpaf_file}"
   end
 
   service "apache2" do 
