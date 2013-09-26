@@ -344,7 +344,7 @@ action :update_rpaf do
   rpaf_proxy_ips = "RPAFproxy_ips 127.0.0.1"
  
   ip_list.each do |ip|
-     rpaf_proxy_ips = rpaf_proxy_ips << " ip"
+     rpaf_proxy_ips = rpaf_proxy_ips << " " << ip
   end
 
   log "  New RPAF Config: #{rpaf_proxy_ips}"
