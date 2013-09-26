@@ -24,6 +24,12 @@ recipe "app_php_multiapp::change_rpaf_config",
 recipe "app_php_multiapp::install_svn_sync",
   "Installs Jesse SVN sync script and its associated files"
 
+recipe "app_php_multiapp::enable_cron_rpaf",
+  "Enable RPAF config changer"
+
+recipe "app_php_multiapp::disable_cron_rpaf",
+  "Disble RPAF config changer"
+
 attribute "app_php_multiapp",
   :display_name => "PHP Application Settings",
   :type => "hash"
