@@ -352,8 +352,7 @@ action :update_rpaf do
   ruby_block "edit rpaf config" do
     block do
       file = Chef::Util::FileEdit.new(rpaf_file)
-      file.search_file_replace_line("/RPAFproxy_ips/", rpaf_proxy_ips)
-      file.insert_line_if_no_match("/www.example.com/", "www.example.com")
+      file.search_file_replace_line("/RPAFproxy/", rpaf_proxy_ips)
       file.write_file
     end
   end
