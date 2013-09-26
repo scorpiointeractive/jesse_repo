@@ -307,14 +307,12 @@ action :setup_monitoring do
 end
 
 action :update_rpaf do
-  #machine_tag = new_resource.machine_tag
+  machine_tag = new_resource.machine_tag
   ip_tag = new_resource.ip_tag
 
   # For backwards compatibility use the private ip tag if the ip_tag
   # was not passed
-  pool_name="default" 
   ip_tag = "server:private_ip_0" unless ip_tag
-  machine_tag = "loadbalancer:#{pool_name}=lb"
   collection_name = new_resource.collection
 
   log "  Using machine tags #{machine_tag} and #{ip_tag} to determine" +
@@ -335,14 +333,30 @@ action :update_rpaf do
     valid_ip_regex =
        '\b(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}' +
        '([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\b'
-   ip_list = node[:server_collection][collection_name].collect do |_, tags|
+    ip_list = node[:server_collection][collection_name].collect do |_, tags|
       # See cookbooks/rightscale/libraries/helper.rb for
       # the "get_tag_value" definition.
-     RightScale::Utils::Helper.get_tag_value(ip_tag, tags, valid_ip_regex)
-   end
+      RightScale::Utils::Helper.get_tag_value(ip_tag, tags, valid_ip_regex)
+    end
   end
 
+  rpaf_file = "/etc/httpd/mods-enabled/rpaf.conf"
+  rpaf_proxy_ips = "RPAFproxy_ips 127.0.0.1"
+ 
   ip_list.each do |ip|
-    Chef::Log.info "  Updating iptables rule for IP Address: #{ip}"  
-  end 
+     rpaf_proxy_ips = rpaf_proxy_ips << " ip"
+  end
+
+  ruby_block "edit rpaf config" do
+    block do
+      file = Chef::Util::FileEdit.new(rpaf_file)
+      file.search_file_replace_line("/RPAFproxy_ips/", rpaf_proxy_ips)
+      file.write_file
+    end
+  end
+  
+  service "apache2" do 
+    action :restart
+    persist false
+  end
 end
