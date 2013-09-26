@@ -357,12 +357,13 @@ action :update_rpaf do
   #  end
   #end
   
-  bash "insert_line" do
+  bash "change rpaf config" do
    user "root"
    code <<-EOS
      sed -i '/RPAFproxy_ips/d' #{rpaf_file} &&
      echo #{rpaf_proxy_ips} >> #{rpaf_file} 
    EOS
+   not_if "grep -q #{rpaf_proxy_ips} #{rpaf_file}" 
   end
 
   service "apache2" do 
