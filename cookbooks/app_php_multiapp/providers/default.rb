@@ -347,6 +347,8 @@ action :update_rpaf do
      rpaf_proxy_ips = rpaf_proxy_ips << " ip"
   end
 
+  log "  New RPAF Config: #{rpaf_proxy_ips}"
+
   ruby_block "edit rpaf config" do
     block do
       file = Chef::Util::FileEdit.new(rpaf_file)
