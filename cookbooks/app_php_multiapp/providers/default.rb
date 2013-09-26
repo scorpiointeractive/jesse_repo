@@ -11,6 +11,7 @@
 # require
 require 'rubygems'
 require 'json'
+require "timeout"
 
 # Stops apache
 action :stop do
@@ -303,4 +304,44 @@ action :setup_monitoring do
 
   log "  Monitoring resource is not implemented in php framework yet. Use apache monitoring instead."
 
+end
+
+action :update_rpaf do
+  machine_tag = new_resource.machine_tag
+  ip_tag = new_resource.ip_tag
+
+  # For backwards compatibility use the private ip tag if the ip_tag
+  # was not passed
+  ip_tag = "server:private_ip_0" unless ip_tag
+
+  collection_name = new_resource.collection
+
+  log "  Using machine tags #{machine_tag} and #{ip_tag} to determine" +
+    " IP address." if machine_tag 
+
+  if machine_tag
+     # See cookbooks/rightscale/providers/server_collection.rb for 
+     # the "rightscale_server_collection" resource.
+     rightscale_server_collection collection_name do
+       tags machine_tag
+       mandatory_tags ip_tag
+     end
+  end
+
+  ip_list = []
+
+  if machine_tag
+    valid_ip_regex =
+       '\b(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}' +
+       '([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\b'
+    ip_list = node[:server_collection][collection_name].collect do |_, tags|
+      # See cookbooks/rightscale/libraries/helper.rb for
+      # the "get_tag_value" definition.
+      RightScale::Utils::Helper.get_tag_value(ip_tag, tags, valid_ip_regex)
+    end
+  end
+
+  ip_list.each do |ip|
+    Chef::Log.info "  Updating iptables rule for IP Address: #{ip}"  
+  end 
 end
