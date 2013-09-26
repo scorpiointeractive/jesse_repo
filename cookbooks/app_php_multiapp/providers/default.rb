@@ -340,7 +340,7 @@ action :update_rpaf do
     end
   end
 
-  rpaf_file = "/etc/httpd/mods-enabled/rpaf.conf"
+  rpaf_file = "/etc/httpd/mods-available/rpaf.conf"
   rpaf_proxy_ips = "RPAFproxy_ips 127.0.0.1"
  
   ip_list.each do |ip|
