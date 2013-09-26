@@ -8,7 +8,7 @@ end
 
 pool_name="default"
 
-node[:server_collection].inspect
+log "Server Collection: #{node[:server_collection].inspect}"
 
 app_php_multiapp "Update rpaf config" do
   machine_tag "loadbalancer:#{pool_name}=lb"
