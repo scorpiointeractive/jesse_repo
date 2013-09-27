@@ -343,8 +343,21 @@ action :update_rpaf do
   rpaf_file = "/etc/httpd/mods-available/rpaf.conf"
   rpaf_proxy_ips = "RPAFproxy_ips 127.0.0.1"
  
+  is_config_change = false
+  old_config = File.readlines(rpaf_file)
+   
   ip_list.each do |ip|
-     rpaf_proxy_ips = rpaf_proxy_ips << " " << ip
+     regex = "/^RPAFProxy_ips/"
+     matches = old_config.select { |line| line[/#{regex}/i] }
+     matches.each do |line|
+       if line =~ "/#{ip}/"
+         
+       else
+         rpaf_proxy_ips = rpaf_proxy_ips << " " << ip
+         is_config_change = true
+         break    
+       end
+     end
   end
 
   log "  New RPAF Config: #{rpaf_proxy_ips}"
@@ -370,6 +383,6 @@ action :update_rpaf do
      echo #{rpaf_proxy_ips} >> #{rpaf_file} &&
      service #{service_name} restart 
    EOS
-   not_if "grep -q '#{rpaf_proxy_ips}' #{rpaf_file}"
+   only_if { is_config_change }
   end
 end
