@@ -18,5 +18,5 @@ attribute :collection, :kind_of => String, :default => "mycollection"
 # Defines a default action
 def initialize(*args)
   super
-  @action = :update
+  @action = :update_rpaf
 end
