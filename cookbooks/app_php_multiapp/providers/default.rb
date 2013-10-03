@@ -317,8 +317,9 @@ action :update_rpaf do
 
   collection_name = new_resource.collection
 
-  log "  Using machine tags #{machine_tag} and #{ip_tag} to determine" +
-    " IP address." if machine_tag 
+  if machine_tag 
+    log "  Using machine tags #{machine_tag} and #{ip_tag} to determine IP address." 
+  end
 
   if machine_tag
      # See cookbooks/rightscale/providers/server_collection.rb for 
