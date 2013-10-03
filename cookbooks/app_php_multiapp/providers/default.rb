@@ -313,6 +313,8 @@ action :update_rpaf do
   # For backwards compatibility use the private ip tag if the ip_tag
   # was not passed
   ip_tag = "server:private_ip_0" unless ip_tag
+  machine_tag "loadbalancer:default=lb"
+
   collection_name = new_resource.collection
 
   log "  Using machine tags #{machine_tag} and #{ip_tag} to determine" +
