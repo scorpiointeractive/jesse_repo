@@ -103,6 +103,9 @@ end
 # Sets up apache PHP virtual host
 action :setup_vhost do
 
+  log "  Settting Virtual Host. Please wait..."
+  start = Time.now
+
   # Setup Apache vhost on following ports
   https_port = "8001"
   http_port = "8000"
@@ -225,6 +228,8 @@ action :setup_vhost do
 	  notifies :restart, resources(:service => "apache2"), :immediately
 	end
   end
+  duration = Time.now - start
+  log "  Setup Virtual Host OK. Time Taken: #{duration} seconds"
 end
 
 # Sets up PHP Database Connection
@@ -252,6 +257,9 @@ end
 
 # Downloads/Updates application repository
 action :code_update do
+
+  log " Running Update Codes."
+  start = Time.now
 
   #Fetch application config data from RightScale Inputs
   data = JSON.parse(node[:app_php_multiapp][:apps_json]);
@@ -297,6 +305,10 @@ action :code_update do
       action :run 
     end
   end
+
+  duration = Time.now - start
+  log "  Update codes successful. Time Taken: #{duration} seconds"
+  
 end
 
 # Sets up monitoring for PHP application server. Not implemented.
