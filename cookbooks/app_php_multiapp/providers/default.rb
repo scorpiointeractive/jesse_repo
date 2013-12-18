@@ -107,8 +107,8 @@ action :setup_vhost do
   log "  #{start}: Settting Virtual Host. Please wait..."
 
   # Setup Apache vhost on following ports
-  https_port = "8001"
-  http_port = "8000"
+  https_port = "443"
+  http_port = "80"
 
   # Disable default vhost
   # See https://github.com/rightscale/cookbooks/blob/master/apache2/definitions/apache_site.rb for the "apache_site" definition.
